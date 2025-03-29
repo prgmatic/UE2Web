@@ -9,7 +9,7 @@ export class CustomAsm {
 
     constructor(){
         const loadWasm = async () => {
-            const response = await fetch('/customasm.wasm');
+            const response = await fetch('customasm.wasm');
             const bytes = await response.arrayBuffer();
             const result = await WebAssembly.instantiate(bytes);
       
