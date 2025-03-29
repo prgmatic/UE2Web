@@ -1,5 +1,8 @@
 ; UE2 Example Program - Summation
 
+; ==== OUTPUT =====
+; First Value in memory viewer
+
 ; OUTPUT = 0
 ; for(int i = 0; i < LOOPCOUNT; ++)
 ;    OUTPUT += i;
@@ -15,7 +18,7 @@ INDEX       = 0x02 			; The current index
 #start_address 04           ; Set address where the assembled program starts
 
 ; Program
-START:		LDA ITERATIONS  ; Calulate the sumamtion of this number
+START:		LDA ITERATIONS  ; Calculate the summation of this number
 			MOV ACR, HCR    ; Move to times to loop to HCR 
 			NOR             ; ACR NOR HCR is a bitwise NOT
 			MOV ACR, HCR    ; Store the inversion for later

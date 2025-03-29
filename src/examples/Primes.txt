@@ -1,5 +1,8 @@
 ; UE2 Example Program - Primes
 
+; ==== OUTPUT =====
+; Values at start of memory viewer
+
 ; This program will generate prime numbers.
 ; You'll want to boost the tick rate.
 
@@ -18,7 +21,7 @@ s2           = 0x86 ; scratch 2
 s3           = 0x87 ; scratch 3
 s4           = 0x88 ; scratch 4
 
-#start_address 0x90 ; Set the address where the asembled program will be placed.
+#start_address 0x90 ; Set the address where the assembled program will be placed.
 
 
 LDA primesToFind ; How many primes to find
@@ -187,7 +190,7 @@ CheckHasRemainder:
         LDM s0                     ; load divisor
         MOV HCR, ACR
         MIN
-		ADD                        ; add divsor to negated dividend
+		ADD                        ; add divisor to negated dividend
 		MOV ACR, HCR
 		MOT
 		
