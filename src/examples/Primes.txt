@@ -1,21 +1,27 @@
 ; UE2 Example Program - Primes
 
 ; This program will generate prime numbers.
-; It doesn't take full advantage of current ISA features
-; This was ported form an older version.
+; You'll want to boost the tick rate.
 
-n           = 0x88 ; Current value being checked
-numOfPrimes = 0x89 ; How many primes to find before the program halts
-primesFound = 0x8A ; How many primes have been found so far
-resultPtr   = 0x8B ; Address to store n if prime.
-s0          = 0x8C ; scratch 0
-s1          = 0x8D ; scratch 1
-s2          = 0x8E ; scratch 2
-s3          = 0x8F ; scratch 3
-s4          = 0x90 ; scratch 4
-output      = 0x94 ; Inspect this address to see results
+; Constant
+primesToFind = 20;
 
-LDA 20 ; How many primes to find
+; Variables
+output       = 0x00 ; Inspect this address to see results. Room for 128 primes.
+n            = 0x80 ; Current value being checked
+numOfPrimes  = 0x81 ; How many primes to find before the program halts
+primesFound  = 0x82 ; How many primes have been found so far
+resultPtr    = 0x83 ; Address to store n if prime.
+s0           = 0x84 ; scratch 0
+s1           = 0x85 ; scratch 1
+s2           = 0x86 ; scratch 2
+s3           = 0x87 ; scratch 3
+s4           = 0x88 ; scratch 4
+
+#start_address 0x90 ; Set the address where the asembled program will be placed.
+
+
+LDA primesToFind ; How many primes to find
 
 
 ; AC = num of primes to generate

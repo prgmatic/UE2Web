@@ -97,10 +97,13 @@ export class Emulator {
         this._isAssembled = result.success;
         this._error = result.error;
 
-        if(!result.success)
+        if(!result.success) {
             this.stepper.emitUpdate();
+            return false;
+        }
+        this.computer.registers.programCounter.value = result.startAddress;
+        this.computer.registers.programCounter.latch();
 
-
-        return result.success;
+        return true;
     }
 }
