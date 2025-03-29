@@ -9,9 +9,15 @@ import { Emulator } from './emulator/Emulator';
 import { throttle } from 'lodash';
 import MemoryViewer from './components/MemoryViewer';
 import AssembleErrorOutput from './components/AssembleErrorOutput';
-import example from './examples/Summation.txt?raw'
+import EditorToolbar from './components/EditorToolbar';
+import summationExample from './examples/Summation.txt?raw'
+import primesExample from './examples/Primes.txt?raw'
 
 const emulator = new Emulator();
+const examplePrograms: { label: string; code: string }[] = [
+  {label: "Example: Summation", code: summationExample},
+  {label: "Example: Primes", code: primesExample}
+];
 
 function App() {
   const [registers, setRegisters] = useState<{ [name: string]: Register }>({});
@@ -20,7 +26,7 @@ function App() {
 
   const [code, setCode] = useState<string>(() => {
     // Load initial value from localStorage or use default
-    return localStorage.getItem('ue2-editor-code') || example;
+    return localStorage.getItem('ue2-editor-code') || summationExample;
   });
 
   const breakpointGlyphs = useRef<editor.IEditorDecorationsCollection>(null);
@@ -77,6 +83,9 @@ function App() {
     }
   };
 
+  const handleOnLoad = (code: string) => {
+    setCode(code);
+  }
 
   return (
 
@@ -100,7 +109,7 @@ function App() {
 
       {/* Main column */}
       <div className="h-full flex-1 flex flex-col min-h-0 overflow-hidden">
-      <div>hello</div>
+        <EditorToolbar examples={examplePrograms} onLoad={handleOnLoad} getCode={() => code} />
         <CodeEditor
           className="flex-1 min-h-0 overflow-auto"
           code={code}

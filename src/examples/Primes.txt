@@ -1,0 +1,211 @@
+; UE2 Example Program - Primes
+
+; This program will generate prime numbers.
+; It doesn't take full advantage of current ISA features
+; This was ported form an older version.
+
+n           = 0x88 ; Current value being checked
+numOfPrimes = 0x89 ; How many primes to find before the program halts
+primesFound = 0x8A ; How many primes have been found so far
+resultPtr   = 0x8B ; Address to store n if prime.
+s0          = 0x8C ; scratch 0
+s1          = 0x8D ; scratch 1
+s2          = 0x8E ; scratch 2
+s3          = 0x8F ; scratch 3
+s4          = 0x90 ; scratch 4
+output      = 0x94 ; Inspect this address to see results
+
+LDA 20 ; How many primes to find
+
+
+; AC = num of primes to generate
+GeneratePrimes:
+	; negate the number of primes to find and store it
+	MOV ACR, HCR 
+	NOR
+	MOV ACR, HCR
+	LDA 1
+	ADD
+	MOV ACR, HCR
+	LDM numOfPrimes
+	MOT
+	
+	; set primes found to 1, the prime 2 is no calculated
+	LDA 1
+	MOV ACR, HCR
+	LDM primesFound
+	MOT
+
+    ; set result pointer
+	LDA output
+	MOV ACR, HCR
+	LDM resultPtr
+	MOT
+	
+	; Store 2 as prime, we won't check it
+	LDA 2
+	MOV HCR, MAR
+	MOV ACR, HCR
+	MOT
+	
+	; inc result ptr
+	LDM resultPtr
+	MIN
+	LDA 1
+	ADD
+	MOV ACR, HCR
+	MOT
+
+	; set n to 3
+	LDA 3
+	MOV ACR, HCR
+	LDM n
+	MOT
+
+	GeneratePrimesLoop:
+	    LDM n
+	    MIN
+        LDA CheckIsPrime
+	    MOV ACR, PCR
+		
+		IsPrime:
+		    LDM n
+		    MIN
+		    LDA StoreResult
+	        MOV ACR, PCR
+		ResultStored:
+			; inc primes found
+			LDM primesFound
+			MIN
+			LDA 1
+			ADD
+			MOV ACR, HCR
+			MOT
+			
+			; if primes found == primes to find, jmp end
+			; load negate primes to find, add primes found
+			LDM numOfPrimes
+			MIN
+			MOV HCR, ACR
+            LDM primesFound
+			MIN
+			ADD
+			BZD End
+		NotPrime:
+			; inc n and store
+			LDM n
+			MIN
+			LDA 1
+			ADD
+			MOV ACR, HCR
+			MOT
+			
+			LDA GeneratePrimesLoop
+            MOV ACR, PCR
+
+End:
+	BZD End
+
+; HC = n (NumberToCheck)
+; TRUE:  jmp IsPrime
+; FALSE: jmp NotPrime
+CheckIsPrime:
+    LDM s1 ; save n in s1
+    MOT
+    LDA s2 ; save negated n in s2
+    MOV ACR, MAR
+    MOV HCR, ACR
+    NOR
+    MOV ACR, HCR
+    LDA 1
+    ADD
+    MOV ACR, HCR
+    MOT
+	
+	; create index and store
+	LDA 2
+	MOV ACR, HCR
+	LDM s3
+	MOT
+	
+	IsPrimeLoop:
+		LDA CheckHasRemainder
+        MOV ACR, PCR
+	
+		HasRemainder: 
+			; increment index and store
+			LDM s3
+			MIN
+			LDA 1
+			ADD
+			MOV ACR, HCR
+			MOT
+		
+		    LDM s2 ; load negate n
+		    MIN
+		    LDM s3 ; load index
+		    MOV HCR, ACR
+		    MIN
+		    ADD ; add negated n and index
+				
+			BZD IsPrime        ; if index == n, jump to Prime
+			LDA IsPrimeLoop ; else loop
+            MOV ACR, PCR
+		
+		NoRemainder:
+			LDA NotPrime
+            MOV ACR, PCR
+
+	
+	
+; s3 = Divisor
+; s1 = Dividend
+; This routine will jmp to NoRemainder or Remainder
+CheckHasRemainder:
+	; negate dividend
+	LDM s1
+	MIN
+	MOV HCR, ACR
+	NOR
+	MOV ACR, HCR
+	LDA 1
+	ADD
+	
+	MOV ACR, HCR
+	LDM s0
+	MOT
+
+	CheckHasRemainderLoop:
+        LDM s3                     ; load remaining
+        MIN
+        LDM s0                     ; load divisor
+        MOV HCR, ACR
+        MIN
+		ADD                        ; add divsor to negated dividend
+		MOV ACR, HCR
+		MOT
+		
+		BZD NoRemainder             ; if result == 0, there is no remainder
+		BLD HasRemainder            ; If result < 0, there is a remainder
+		LDA CheckHasRemainderLoop   ; if result > 0, keep looping
+        MOV ACR, PCR
+
+; HC = Value to Store
+StoreResult:
+	LDM resultPtr
+	MOV HCR, ACR ; move result to acr
+	MIN
+	MOV HCR, MAR
+	MOV ACR, HCR
+	MOT
+	
+	; increment resultPtr
+	LDA 1
+	LDM resultPtr
+	MIN
+	ADD
+	MOV ACR, HCR
+	MOT
+	
+	LDA ResultStored
+	MOV ACR, PCR
