@@ -66,7 +66,7 @@ const StepperControls: React.FC<StepperControlsProps> = ({ emulator }) => {
   return (
     <div className="mb-4 px-4">
       <div className="flex gap-4 justify-center mb-2">
-        <div className="flex gap-2 grow justify-center mb-2">
+        <div className="flex gap-2 grow justify-end mb-2 mr-6">
           <button
             className="stepper-button hover:brightness-110 rounded disabled:opacity-50"
             onClick={handleSingleStep}

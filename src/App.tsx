@@ -12,11 +12,12 @@ import AssembleErrorOutput from './components/AssembleErrorOutput';
 import EditorToolbar from './components/EditorToolbar';
 import summationExample from './examples/Summation.txt?raw'
 import primesExample from './examples/Primes.txt?raw'
+import GitHubLogo from './assets/github-mark-white.svg';
 
 const emulator = new Emulator();
 const examplePrograms: { label: string; code: string }[] = [
-  {label: "Example: Summation", code: summationExample},
-  {label: "Example: Primes", code: primesExample}
+  { label: "Example: Summation", code: summationExample },
+  { label: "Example: Primes", code: primesExample }
 ];
 
 function App() {
@@ -94,6 +95,9 @@ function App() {
       <div className="w-80 flex flex-col h-full min-h-0 overflow-hidden">
         {/* Controls + Registers: fixed height content */}
         <div className="p-4 flex-shrink-0 w-full">
+          <a href="https://github.com/yourusername/your-repo" className='absolute top-3.5 left-6' target="_blank" rel="noopener noreferrer">
+            <img src={GitHubLogo} alt="GitHub" className="w-10 h-10" />
+          </a>
           <StepperControls emulator={emulator} />
           <RegisterTable registers={registers} />
         </div>
