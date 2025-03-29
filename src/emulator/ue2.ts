@@ -35,6 +35,7 @@ export class UE2 {
 
     public reset(): void {
         this.registers.reset();
+        this.memory.clear();
     }
 }
 
