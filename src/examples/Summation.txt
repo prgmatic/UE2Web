@@ -1,0 +1,43 @@
+; UE2 Example Program - Summation
+
+; OUTPUT = 0
+; for(int i = 0; i < LOOPCOUNT; ++)
+;    OUTPUT += i;
+
+; Variables
+OUTPUT      = 0x24  		; Store the result of the program here
+LOOPCOUNT   = 0x25          ; Target number for loop. Will be inverted.
+INDEX       = 0x26 			; The current index
+
+; Program
+START:		LDA 10          ; Calulate the sumamtion of this number
+			MOV ACR, HCR    ; Move to times to loop to HCR 
+			NOR             ; ACR NOR HCR is a bitwise NOT
+			MOV ACR, HCR    ; Store the inversion for later
+			LDM LOOPCOUNT   ; Point MAR at LOOPCOUNT
+			MOT             ; Store to memory
+			LDA 1           ; The starting index
+			MOV ACR, HCR    ; Move index to HCR
+			LDM INDEX		; Load INDEX address into MAR
+			MOT             ; Save Index
+			LDA 0           ; The starting sum
+			MOV ACR, BFR    ; Move sum into BFR
+LOOP: 		MOV BFR, ACR    ; Put sum into HCR
+			LDM INDEX		; Load INDEX address into MAR
+			MIN				; Load index into HCR
+			ADD             ; ADD index and sum
+			MOV ACR, BFR    ; Put sum into BFR
+			LDA 1           ; Load one
+			ADD             ; Add 1 to index
+			MOV ACR, HCR    ; Move index to hcr
+			MOT				; Save Index
+			LDM LOOPCOUNT	; Load LOOPCOUNT address into MAR
+			MIN             ; Load LOOPCOUNT
+			ADD             ; ADD
+			BZD END         ; If zero, we reached end of loop. Jump to end.
+			LDA LOOP		; Else jump to loop star
+			MOV ACR, PCR    ; MOV loop address in PCR
+END:		MOV BFR, HCR    ; MOV sum to HCR
+			LDM OUTPUT	    ; Load OUTPUT address in MAR
+			MOT				; Save output
+HALT:		BZD HALT		; Jump here forever

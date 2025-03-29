@@ -9,7 +9,7 @@ import { Emulator } from './emulator/Emulator';
 import { throttle } from 'lodash';
 import MemoryViewer from './components/MemoryViewer';
 import AssembleErrorOutput from './components/AssembleErrorOutput';
-
+import example from './examples/Summation.txt?raw'
 
 const emulator = new Emulator();
 
@@ -20,7 +20,7 @@ function App() {
 
   const [code, setCode] = useState<string>(() => {
     // Load initial value from localStorage or use default
-    return localStorage.getItem('ue2-editor-code') || '; UE2 Program \nStart:\n\tLDA 123\n\tMOV ACR, HCR';
+    return localStorage.getItem('ue2-editor-code') || example;
   });
 
   const breakpointGlyphs = useRef<editor.IEditorDecorationsCollection>(null);
@@ -80,29 +80,38 @@ function App() {
 
   return (
 
-    <div className="flex h-screen">
+    <div className="flex h-screen min-h-0 overflow-hidden">
       {/* Left sidebar */}
-      <div className="w-80 p-4 flex flex-col h-full">
-        <StepperControls emulator={emulator} />
-        <RegisterTable registers={registers} />
-        <MemoryViewer
-          className="grow min-h-0 overflow-auto"
-          readMemory={(addr) => emulator.computer.memory.read(addr)}
-        />
+      <div className="w-80 flex flex-col h-full min-h-0 overflow-hidden">
+        {/* Controls + Registers: fixed height content */}
+        <div className="p-4 flex-shrink-0 w-full">
+          <StepperControls emulator={emulator} />
+          <RegisterTable registers={registers} />
+        </div>
+
+        {/* Memory viewer: fills remaining space and scrolls */}
+        <div className="flex-1 min-h-0 overflow-auto p-4">
+          <MemoryViewer
+            className="w-full"
+            readMemory={(addr) => emulator.computer.memory.read(addr)}
+          />
+        </div>
       </div>
 
       {/* Main column */}
-      <div className="h-full grow flex flex-col min-h-0">
+      <div className="h-full flex-1 flex flex-col min-h-0 overflow-hidden">
+      <div>hello</div>
         <CodeEditor
-          className="grow-[2] basis-0 min-h-0 overflow-auto"
+          className="flex-1 min-h-0 overflow-auto"
           code={code}
           onChange={setCode}
           highlightRange={highlightRange}
           breakpointGlyphs={breakpointGlyphs}
           onToggleBreakpoint={onToggleBreakpoint}
         />
+
         <AssembleErrorOutput
-          className="grow basis-0 min-h-0 overflow-auto "
+          className="flex-1 min-h-0 overflow-auto"
           output={assembleErrorOutput}
         />
       </div>
