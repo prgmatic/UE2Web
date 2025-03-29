@@ -51,7 +51,7 @@ describe('AssemblyParser.parseAssembledLine', () => {
 describe('AssemblyParser.parseAddressSpan', () => {
   it('parses a valid line correctly', () => {
     const input = '30:6 | 1a | asm:147:1:147:13';
-    const result = AssemblyParser.parseAddressSpan(input);
+    const result = AssemblyParser.parseAddressSpan(input, 0);
 
     const expected: AddressSpan = {
       address: 26, // 0x1a
@@ -66,25 +66,25 @@ describe('AssemblyParser.parseAddressSpan', () => {
 
   it('returns null on missing parts', () => {
     const input = '30:6 | 1a'; // missing the third part
-    const result = AssemblyParser.parseAddressSpan(input);
+    const result = AssemblyParser.parseAddressSpan(input, 0);
     expect(result).toBeNull();
   });
 
   it('returns null on invalid address', () => {
     const input = '30:6 | ZZ | asm:147:1:147:13'; // invalid hex
-    const result = AssemblyParser.parseAddressSpan(input);
+    const result = AssemblyParser.parseAddressSpan(input, 0);
     expect(result).toBeNull();
   });
 
   it('returns null on malformed span', () => {
     const input = '30:6 | 1a | asm:147:1'; // not enough numbers
-    const result = AssemblyParser.parseAddressSpan(input);
+    const result = AssemblyParser.parseAddressSpan(input, 0);
     expect(result).toBeNull();
   });
 
   it('parses when source path has extra colons', () => {
     const input = '30:6 | 1a | some:file.asm:147:1:147:13';
-    const result = AssemblyParser.parseAddressSpan(input);
+    const result = AssemblyParser.parseAddressSpan(input, 0);
 
     expect(result).toEqual({
       address: 26,
