@@ -5,7 +5,7 @@ describe('Register', () => {
     let reg: Register;
 
     beforeEach(() => {
-        reg = new Register(4, "Reg"); // 4-bit register = max value 15 (0b1111)
+        reg = new Register(4); // 4-bit register = max value 15 (0b1111)
     });
 
     it('initializes to 0', () => {

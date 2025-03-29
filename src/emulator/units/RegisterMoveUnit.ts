@@ -1,6 +1,6 @@
 import { DecodedInstruction, MemoryMoveType, RegisterType } from "../DecodedInstruction";
 import { opcode } from "../DecodedInstruction";
-import { Register } from "../Register";
+import { Register, RegisterRwMode } from "../Register";
 import { Registers } from "../Registers";
 
 export class RegisterMoveUnit {
@@ -12,7 +12,8 @@ export class RegisterMoveUnit {
                     return;
                 const source = this.getRegisterFromType(instruction.registerSource, registers);
                 const destination = this.getRegisterFromType(instruction.registerDestination, registers);
-                destination.value = source.value;
+                destination.value = source.rwMode == RegisterRwMode.WriteOnly ? 0 : source.value;
+
                 if(instruction.registerDestination == RegisterType.programCounter)
                     didJump.value = true;
                 else if(instruction.registerDestination == RegisterType.accumulator){

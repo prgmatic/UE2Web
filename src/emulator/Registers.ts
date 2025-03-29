@@ -1,13 +1,13 @@
-import { Register } from "./Register";
+import { Register, RegisterRwMode } from "./Register";
 
 export class Registers {
-    accumulator   : Register = new Register(15, "ACR");
-    holdingCell   : Register = new Register(15, "HCR");
-    buffer        : Register = new Register(15, "BFR");
-    memoryAddress : Register = new Register(12, "MAR");
-    programCounter: Register = new Register(12, "PCR");
-    zeroFlag      : Register = new Register(1,  "ZFlag");
-    carryFlag     : Register = new Register(1,  "LFlag");
+    accumulator   : Register = new Register(15, RegisterRwMode.ReadAndWrite, "ACR");
+    holdingCell   : Register = new Register(15, RegisterRwMode.ReadAndWrite, "HCR");
+    buffer        : Register = new Register(15, RegisterRwMode.ReadAndWrite, "BFR");
+    memoryAddress : Register = new Register(12, RegisterRwMode.WriteOnly,    "MAR");
+    programCounter: Register = new Register(12, RegisterRwMode.WriteOnly,    "PCR");
+    zeroFlag      : Register = new Register( 1, RegisterRwMode.None,         "ZFlag");
+    carryFlag     : Register = new Register( 1, RegisterRwMode.None,         "LFlag");
 
     public latch(): void {
         this.accumulator.latch();
