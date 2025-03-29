@@ -38,7 +38,7 @@ export class RegisterMoveUnit {
             case RegisterType.holdingCell:
                 return registers.holdingCell;
             case RegisterType.buffer:
-                return registers.holdingCell;
+                return registers.buffer;
             case RegisterType.memoryAddress:
                 return registers.memoryAddress;
             case RegisterType.programCounter:
