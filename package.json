@@ -20,13 +20,15 @@
     "lucide-react": "^0.485.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-split": "^2.0.14"
+    "react-split": "^2.0.14",
+    "react-window": "^1.8.11"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
     "@types/lodash": "^4.17.16",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
+    "@types/react-window": "^1.8.8",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.21.0",

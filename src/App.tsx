@@ -92,7 +92,7 @@ function App() {
 
     <div className="flex h-screen min-h-0 overflow-hidden">
       {/* Left sidebar */}
-      <div className="w-80 flex flex-col h-full min-h-0 overflow-hidden">
+      <div className="w-86 flex flex-col h-full min-h-0 overflow-hidden">
         {/* Controls + Registers: fixed height content */}
         <div className="p-4 flex-shrink-0 w-full">
           <a href="https://github.com/prgmatic/UE2Web" className='absolute top-3.5 left-6' target="_blank" rel="noopener noreferrer">
@@ -107,6 +107,8 @@ function App() {
           <MemoryViewer
             className="w-full"
             readMemory={(addr) => emulator.computer.memory.read(addr)}
+            startAddress={0x000}
+            endAddress={0x0FFF}
           />
         </div>
       </div>
